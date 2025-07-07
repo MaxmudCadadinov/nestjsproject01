@@ -1,4 +1,6 @@
-import { IsString, IsNumber } from 'class-validator';
+import { IsString, IsOptional,IsEnum } from 'class-validator';
+import { user_status } from '../users.entity';
+
 
 export class CreateRegDto {
   
@@ -14,7 +16,11 @@ export class CreateRegDto {
   @IsString()
   password: string;
 
+  @IsOptional()
+  @IsEnum(user_status, { message: 'Status must be user or admin' })
+  status?: user_status;
 
 
-  
+
+ 
 }

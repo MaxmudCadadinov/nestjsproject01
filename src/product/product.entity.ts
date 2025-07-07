@@ -1,10 +1,6 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-} from 'typeorm';
+import {Entity,PrimaryGeneratedColumn,Column,OneToMany,} from 'typeorm';
 import { Cart } from '../order/order.entity';
+import { Order } from '../payment/shopped.table.entity'
 
 @Entity('flawer_products')
 export class Product {
@@ -22,4 +18,5 @@ export class Product {
 
   @OneToMany(() => Cart, cart => cart.product)
   carts: Cart[];
+
 }

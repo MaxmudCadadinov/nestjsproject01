@@ -9,7 +9,7 @@ export class CreateOrderDto {
   @IsArray()
   @ArrayMinSize(1, { message: 'Нужно передать хотя бы один товар' })
   items: {
-    productId: number;
+    productID: number;
     quantity: number;
   }[];
 }

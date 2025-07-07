@@ -1,10 +1,12 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-} from 'typeorm';
+import {Entity,PrimaryGeneratedColumn,Column,OneToMany} from 'typeorm';
 import { Cart } from '../order/order.entity';
+import { Order } from 'src/payment/shopped.table.entity';
+
+
+export enum user_status {
+  user = 'user',
+  admin = 'admin'
+}
 
 @Entity('flawer_user')
 export class Users {
@@ -23,6 +25,10 @@ export class Users {
   @Column()
   email: string;
 
+  @Column({
+    type: 'enum', enum: user_status, default: user_status.user})
+  status: user_status;
+
   @Column({ type: 'datetime', nullable: true, default: null })
   active_at: Date | null;
 
@@ -31,4 +37,7 @@ export class Users {
 
   @OneToMany(() => Cart, cart => cart.user)
   carts: Cart[];
+
+  @OneToMany(() => Order, order => order.user)
+  orders: Order[];
 }

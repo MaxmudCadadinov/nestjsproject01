@@ -1,7 +1,8 @@
-import { Controller, Body, Post, Delete, Param, Get, ParseIntPipe, HttpCode } from '@nestjs/common';
+import { Controller, Body, Post, Delete, Param, Get, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto }  from './product.dto'; 
-
+import { Product } from './product.entity';
+import { JwtAuthGuard } from 'src/jwt/jwt_auth.guard';
 
 @Controller()
 export class ProductController {
@@ -27,6 +28,13 @@ export class ProductController {
     return this.productService.decreased_product(id, num)
 }
 
+
+  @UseGuards(JwtAuthGuard)
+  @Get('/all_products')
+  @HttpCode(200)
+  async all_products(): Promise<Product[]> {
+    return  await this.productService.find_all();
+  }
 
 
 }   

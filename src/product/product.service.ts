@@ -35,6 +35,13 @@ async decreased_product(id: number, num: number): Promise<void> {
   product.quantity -= num
   await this.productsRepo.save(product)
 }
+
+
+async find_all(){
+  const all_product_list =await this.productsRepo.find()
+  console.log(all_product_list)
+  return all_product_list
+}
  }
     
 
