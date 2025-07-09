@@ -16,6 +16,9 @@ export class Product {
   @Column()
   quantity: number;
 
+  @Column({ default: 'image-1751973996603-240036705.png' })
+  image: string
+
   @OneToMany(() => Cart, cart => cart.product)
   carts: Cart[];
 

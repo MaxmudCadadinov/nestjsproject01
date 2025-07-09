@@ -13,8 +13,8 @@ export class ProductService {
 
 ){}
 
-async add_product(dto: CreateProductDto): Promise<Product>{
-    const new_product = await this.productsRepo.create(dto)
+async add_product(dto: CreateProductDto, file: Express.Multer.File): Promise<Product>{
+    const new_product = await this.productsRepo.create({...dto, image:file.filename})
     return await this.productsRepo.save(new_product)
     
 } 
@@ -39,8 +39,9 @@ async decreased_product(id: number, num: number): Promise<void> {
 
 async find_all(){
   const all_product_list =await this.productsRepo.find()
-  console.log(all_product_list)
-  return all_product_list
+  const new_list = all_product_list.map(product => ({...product, image: `http://localhost:3000/images/${product.image}`})) 
+
+  return new_list
 }
  }
     

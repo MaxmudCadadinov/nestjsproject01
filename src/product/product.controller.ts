@@ -1,18 +1,34 @@
-import { Controller, Body, Post, Delete, Param, Get, ParseIntPipe, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Body, Post, Delete, Param, Get, ParseIntPipe, HttpCode,UseInterceptors, UploadedFile} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ProductService } from './product.service';
 import { CreateProductDto }  from './product.dto'; 
 import { Product } from './product.entity';
-import { JwtAuthGuard } from 'src/jwt/jwt_auth.guard';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
+import { join } from 'path';
 
 @Controller()
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
+
+  
+
   @Post('/add_product')
   @HttpCode(201)
-  async add_product( @Body() dto: CreateProductDto ) {
+  @UseInterceptors(FileInterceptor('image', {
+    storage: diskStorage({
+      destination: './images',
+      filename(req, file, cb) {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+        const ext = extname(file.originalname);
+        cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`)
+      },
+    })
+  }))
+  async add_product( @Body() dto: CreateProductDto, @UploadedFile() file: Express.Multer.File) {
     
-  const product = await this.productService.add_product(dto);
+  const product = await this.productService.add_product(dto, file);
   return product
 }
 
@@ -29,7 +45,7 @@ export class ProductController {
 }
 
 
-  @UseGuards(JwtAuthGuard)
+  
   @Get('/all_products')
   @HttpCode(200)
   async all_products(): Promise<Product[]> {

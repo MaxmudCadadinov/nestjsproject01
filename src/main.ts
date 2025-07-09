@@ -5,6 +5,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { ResponseInterceptor } from '../response.interceptor';
 import * as bodyParser from 'body-parser';
 import 'dotenv/config';
+import * as express from 'express';
+
 
 
 async function bootstrap() {
@@ -12,6 +14,8 @@ async function bootstrap() {
   app.use('/webhook', bodyParser.raw({ type: 'application/json' }))
   app.use(bodyParser.json())
   app.useGlobalPipes(new ValidationPipe());
+  app.use('/images', express.static('images'))
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
