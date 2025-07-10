@@ -46,10 +46,10 @@ export class ProductController {
 
 
   
-  @Get('/all_products')
+  @Get('/all_products/:page')
   @HttpCode(200)
-  async all_products(): Promise<Product[]> {
-    return  await this.productService.find_all();
+  async all_products(@Param("page",ParseIntPipe) page:number): Promise<Product[]> {
+    return  await this.productService.find_all(page);
   }
 
 

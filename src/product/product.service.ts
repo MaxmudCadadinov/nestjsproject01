@@ -37,8 +37,10 @@ async decreased_product(id: number, num: number): Promise<void> {
 }
 
 
-async find_all(){
-  const all_product_list =await this.productsRepo.find()
+async find_all(page:number){
+  const limit=10
+  const skip=(page-1)*10
+  const all_product_list =await this.productsRepo.find({skip,take:limit})
   const new_list = all_product_list.map(product => ({...product, image: `http://localhost:3000/images/${product.image}`})) 
 
   return new_list
